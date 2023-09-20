@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+    ubu2204quartus22:
+        container_name: ubu2204quartus22
+        image: ${USER}/ubu2204quartus22:ubu2204quartus22-20231001
+        build:
+            context: build_context
+            dockerfile: Dockerfile
+            args:
+                USER: "${USER}"
+                UID: "${UID}"
+                GID: "${GID}"
+        user: "${UID}:${GID}"
+        stdin_open: true          ## docker run -i
+        tty: true                 ## docker run -t
+        privileged: true          ## this is a development env!
+        environment:
+          - USER
+          - DISPLAY=$DISPLAY
+        env_file:
+          - .env
+        group_add:
+          - 20                    ## group: dialout
+        volumes:
+          ## folders not need to be around
+          - /tmp/.X11-unix:/tmp/.X11-unix
+          - ~/.Xauthority:/home/${USER}/.Xauthority:ro
+          - ~/.gitconfig:/home/${USER}/.gitconfig:ro
+          - ~/.ssh:/home/${USER}/.ssh
+          - ./workspace:/home/${USER}/workspace
+          ## folder must be around
+          - type: bind
+            source: ./build_configs
+            target: /home/$USER/configs
+        network_mode: "host"

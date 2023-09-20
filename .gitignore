@@ -1,0 +1,11 @@
+## backups
+*~
+*#
+*.orig
+*.rej
+
+## ignore output folder
+workspace*
+
+## docker env files
+.env
