@@ -221,4 +221,4 @@ RUN mkdir -p /home/$USER/.ssh
 USER ${USER}
 WORKDIR /home/$USER
 COPY *.sh /usr/local/bin/
-CMD ["/bin/bash", "/usr/local/bin/build.sh"]
+CMD ["/bin/bash", "/usr/local/bin/00_devenv.sh", "~/workspace"]
