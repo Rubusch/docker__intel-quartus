@@ -159,36 +159,17 @@ RUN adduser "$USER" sudo
 RUN adduser "$USER" dialout
 
 ##################################################################################
-#### tftp server
-##USER root
-##RUN echo -e '\
-##service tftp\n\
-##    {\n\
-##    protocol = udp\n\
-##    port = 69\n\
-##    socket_type = dgram\n\
-##    wait = yes\n\
-##    user = nobody\n\
-##    server = /usr/sbin/in.tftpd\n\
-##    server_args = /tftpboot\n\
-##    disable = no\n\
-##    }\n\
-##' > /etc/xinetd.d/tftp
-##
-##RUN mkdir /tftpboot
-##RUN chmod -R 777 /tftpboot
-##RUN chown -R nobody /tftpboot
-##RUN /etc/init.d/xinetd stop tftp
-##RUN /etc/init.d/xinetd start tftp
-
-##################################################################################
 ## quartus prime installation
 USER $USER
 WORKDIR /home/$USER
 
 RUN git clone https://github.com/CTSRD-CHERI/quartus-install.git
 RUN /home/$USER/quartus-install/quartus-install.py 22.1pro /opt/intelFPGA/22.1pro a10 c5
-RUN rm -rf *.qdz
+
+## keep the .qdz files
+#RUN rm -rf *.qdz
+
+## at most remove the .run file
 RUN rm -rf *.run
 
 ################################################################################
